@@ -5,22 +5,25 @@ import (
 )
 func sumarProductos(a, b, c int, chSuma chan int){
 	suma := a + b + c
-	chSuma <- suma
 	fmt.Println("[sumarProductos] El resultado de la suma es:", suma, ". enviado al canal.")
+	chSuma <- suma
+	
 }
 func calcularIva(iva float32, chSuma, chIva, chNeto chan int){
 	neto := <- chSuma
 	impuesto := int(float32(neto)*iva)
+	fmt.Println("[calcularIva] El impuesto es:", impuesto, ". Enviado al canal")
 	chIva <- impuesto
 	chNeto <- neto
-	fmt.Println("[calcularIva] El impuesto es:", impuesto, ". Enviado al canal")
+	
 }
 func calcularBruto(chNeto, chIva, chBruto chan int){
 	impuesto := <- chIva
 	neto := <- chNeto
 	bruto:= neto + impuesto
-	chBruto <- bruto
 	fmt.Println("[calcularBruto] Calculo enviado al canal")
+	chBruto <- bruto
+	
 }
 func main(){
 	const iva float32 = 0.19
